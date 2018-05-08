@@ -2,6 +2,8 @@
 
 //EJERCICIO 20 A
 
+//asjhfjasdf
+
 int tamCadena (char *cadena) {
 
     int tam=0, i;
@@ -19,7 +21,7 @@ int main (void) {
     char cad2[] = "";
     char cad3[] = " ";
 
-    printf("La cadena 1 es de tamanio: %u\n", tamCadena(cad1));
+    printf("La cadena 1 es de tamaño: %u\n", tamCadena(cad1));
     printf("La cadena 2 es de tamanio: %u\n", tamCadena(cad2));
     printf("La cadena 3 es de tamanio: %u\n", tamCadena(cad3));
 
