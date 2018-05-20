@@ -1,4 +1,7 @@
+typedef enum { false, true } bool; //para usar booleanos
+
 # include "stdio.h"
+
 
 //Son los valores que tienen en la tabla ascii (en decimales)
 # define espacio 32
@@ -118,21 +121,100 @@ void main(){
 	
 	FILE *fInput;
 	FILE *fOutput;
+	
 	char caracter;
-	int tipo;
+	int tipo, estado=0, i=0;
+	bool finPalabra = false, finRenglon = false, terminarPalabra = false;
+	
+	char noConstante[24] = " No es constante entera";
+	char cteDecimal[9] = " Decimal";
+	char cteOctal[7] = " Octal";
+	char cteHexa[13] = " Hexadecimal";
 	
 	fInput = fopen ("input.txt", "r");
-	fOutput = fopen("output.txt", "w+");
+	fOutput = fopen("output.txt", "w");
 
 
-	while (!feof(ptrArchLectura)){
-		caracter = getc(ptrArchLectura);
-		
+	while (!feof(fInput)){
+		caracter = getc(fInput);
 		tipo = definirTipo(caracter);
 
-		estado = transicionarEstado(cero, estado);
+		switch(tipo){
+			case cero:
+			case digOct:
+				estado = transicionarEstado(tipo, estado);
+				break;
+			case unoDe89:
+				if(estado != 2 || estado !=3 )
+					estado = transicionarEstado(tipo, estado);
+				else
+					terminarPalabra = true;
+				break;
+			case letHex:
+				if(estado == 4 || estado == 5 )
+					estado = transicionarEstado(tipo, estado);
+				else
+					terminarPalabra = true;
+				break;
+			case equis:
+				if(estado == 2 )
+					estado = transicionarEstado(tipo, estado);
+				else
+					terminarPalabra = true;
+				break;
+			case espacio: 
+				finPalabra = true;
+				break;
+			default:
+
+				while(!feof(fInput) && tipo != espacio){ //termina de escribir la palabra 
+					fwrite(caracter,sizeof(char),1,fOutput);
+					caracter = getc(fInput);
+					tipo = definirTipo(caracter);
+				}
+				
+				do{ //escribe " No es constante entera", seguido de la palabra
+					fwrite(noConstante[i],sizeof(char),1,fOutput);
+					i++;
+				}while(noConstante[i] != '\0');
+				i=0;
+
+				fwrite('\n',sizeof(char),1,fOutput); //escribir salto de línea
+				
+				finRenglon = true;
+				
+				break;
+		}
 		
-		printf ("%c", caracter);
+		if(!finRenglon || feof(fInput)){			
+			if(!finPalabra)
+				fwrite(caracter,sizeof(char),1,fOutput);
+			else{
+				if(estado == 2 || estado == 3){
+					do{ //escribe " Octal" seguido de la palabra
+						fwrite(cteOctal[i],sizeof(char),1,fOutput);
+						i++;
+					}while(cteOctal[i] != '\0');
+				}else if(estado == 1){
+					do{ //escribe " Decimal" seguido de la palabra
+						fwrite(cteDecimal[i],sizeof(char),1,fOutput);
+						i++;
+					}while(cteDecimal[i] != '\0');
+				}else{
+					do{ //escribe " Hexadecimal" seguido de la palabra
+						fwrite(cteHexa[i],sizeof(char),1,fOutput);
+						i++;
+					}while(cteHexa[i] != '\0');
+				}
+				i=0;
+				fwrite('\n',sizeof(char),1,fOutput); //escribir salto de línea
+				
+				finPalabra = false;
+			}
+		}
+		else //se reinicia para leer una nueva palabra
+			finRenglon = false;
+		
 	}
 
 	fclose (ptrArchLectura);
