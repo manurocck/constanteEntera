@@ -1,0 +1,10 @@
+123 Decimal
+0xFFA Hexadecimal
+011 Octal
+0x0 Hexadecimal
+1 Decimal
+0 Octal
+X Hexadecimal
+019 Hexadecimal
+0x No es constante entera
+
