@@ -11,8 +11,6 @@ char *escribirTipo(int estado) {
 			tipo = " decimal\n";
 			return tipo;
 		case 2:
-		    tipo = " octal\n";
-			return tipo;
 		case 3:
 			tipo = " octal\n";
 			return tipo;
@@ -30,117 +28,74 @@ char *escribirTipo(int estado) {
 			 tipo = " long decimal\n";
              return tipo;
 		case 9:
-		case 10:
 			tipo = " unsigned long decimal\n";
 			return tipo;
-        case 11:
+        case 10:
             tipo = " unsigned octal\n";
             return tipo;
-        case 12:
+        case 11:
             tipo = " long octal\n";
             return tipo;
-        case 13:
-        case 14:
+        case 12:
             tipo = " unsigned long octal\n";
             return tipo;
-        case 15:
+        case 13:
             tipo = " unsigned hexadecimal\n";
             return tipo;
-        case 16:
+        case 14:
             tipo = " long hexadecimal\n";
             return tipo;
-        case 17:
-        case 18:
+        case 15:
             tipo = " unsigned long hexadecimal\n";
             return tipo;
 	}
 }
 
-int cambiarEstado (int estado, char c) {
-	switch (estado) {
-		case 0:
-			if (c == '0')
-				return 2;
-			else if (c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9')
-				return 1;
-			else
-				return 6;
-		case 1:
-			if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9')
-				return 1;
-			else if (c == 'u' || c == 'U')
-				return 7;
-			else if (c == 'l' || c == 'L')
-				return 8;
-			else
-				return 6;
-		case 2:
-			if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7')
-				return 3;
-			else if (c == 'x' || 'X')
-				return 4;
-			else if (c == 'u' || c == 'U')
-				return 11;
-			else if (c == 'l' || c == 'L')
-				return 12;
-			else
-				return 6;
-		case 3:
-			if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7')
-				return 3;
-			else if (c == 'u' || c == 'U')
-				return 11;
-			else if (c == 'l' || c == 'L')
-				return 12;
-			else
-				return 6;
-		case 4:
-			if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == 'a' || c == 'A' || c == 'b' || c == 'B' || c == 'c' || c == 'C' || c == 'd' || c == 'D' || c == 'e' || c == 'E' || c == 'f' || c == 'F')
-				return 5;
-			else
-				return 6;
-		case 5:
-			if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == 'a' || c == 'A' || c == 'b' || c == 'B' || c == 'c' || c == 'C' || c == 'd' || c == 'D' || c == 'e' || c == 'E' || c == 'f' || c == 'F')
-				return 5;
-			else if (c == 'u' || c == 'U')
-				return 15;
-			else if (c == 'l' || c == 'L')
-				return 16;
-			else
-				return 6;
-		case 7:
-			if (c == 'l' || c == 'L')
-				return 9;
-			else
-				return 6;
-		case 8:
-			if (c == 'u' || c == 'U')
-				return 10;
-			else
-				return 6;
-		case 11:
-			if (c == 'l' || c == 'L')
-				return 13;
-			else
-				return 6;
-		case 12:
-			if (c == 'u' || c == 'U')
-				return 14;
-			else
-				return 6;
-		case 15:
-			if (c == 'l' || c == 'L')
-				return 17;
-			else
-				return 6;
-		case 16:
-			if (c == 'u' || c == 'U')
-				return 18;
-			else
-				return 6;
-		default:
+int definirTipo (char c) {
+	switch (c) {
+		case '0':
+			return 0;
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+			return 1;
+		case '8':
+		case '9':
+			return 2;
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+			return 3;
+		case 'x':
+		case 'X':
+			return 4;
+		case 'u':
+		case 'U':
+			return 5;
+		case 'l':
+		case 'L':
 			return 6;
+		default:
+			return 7;
 	}
+}
+
+int cambiarEstado (int tabla[16][8],int estado, char c) {
+	int tipoCaracter = definirTipo(c);
+	return tabla[estado][tipoCaracter];
 }
 
 void mostrarResultadoPorPantalla(){
@@ -165,12 +120,31 @@ void main() {
 
 	char caracter;
 	int estado = 0;
+	int tablaDeTransicion[16][8] = {
+		{2, 1, 1, 6, 6, 6, 6, 6},
+		{1, 1, 1, 6, 6, 7, 8, 6},
+		{3, 3, 6, 6, 4, 7, 8, 6},
+		{3, 3, 6, 6, 6,10,11, 6},
+		{5, 5, 5, 5, 6, 6, 6, 6},
+		{5, 5, 5, 5, 6,13,14, 6},
+		{6, 6, 6, 6, 6, 6, 6, 6},
+		{6, 6, 6, 6, 6, 6, 9, 6},
+		{6, 6, 6, 6, 6, 9, 6, 6},
+		{6, 6, 6, 6, 6, 6, 6, 6},
+		{6, 6, 6, 6, 6, 6,12, 6},
+		{6, 6, 6, 6, 6,12, 6, 6},
+		{6, 6, 6, 6, 6, 6, 6, 6},
+		{6, 6, 6, 6, 6, 6,15, 6},
+		{6, 6, 6, 6, 6,15, 6, 6},
+		{6, 6, 6, 6, 6, 6, 6, 6}
+	};
 
 	fInput = fopen ("input.txt", "r");
 	fOutput = fopen("output.txt", "w");
 
     printf("  ARCHIVO ENTRADA : \n");
     printf("---------------------\n");
+
 	while (!feof(fInput)) {
 
 		caracter = getc(fInput);
@@ -181,7 +155,7 @@ void main() {
 			estado = 0;
 		} else {
 			fputc(caracter, fOutput);
-			estado = cambiarEstado(estado, caracter);
+			estado = cambiarEstado(tablaDeTransicion, estado, caracter);
 		}
 	}
 	fclose(fInput);
