@@ -1,10 +1,18 @@
-123 Decimal
-0xFFA Hexadecimal
-011 Octal
-0x0 Hexadecimal
-1 Decimal
-0 Octal
-X Hexadecimal
-019 Hexadecimal
-0x No es constante entera
-
+elefante no es constante entera
+123pez no es constante entera
+456 decimal
+tigre7891 no es constante entera
+011 octal
+lobo no es constante entera
+109 decimal
+0Xcaca hexadecimal
+0x123 hexadecimal
+SiguenMuchosEspacios no es constante entera
+00 octal
+0 octal
+0xc4c4 hexadecimal
+0x no es constante entera
+1324 decimal
+Siguen2Enters no es constante entera
+ProximoEsElUltimo no es constante entera
+TPAprobado10 no es constante entera

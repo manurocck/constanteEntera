@@ -143,6 +143,22 @@ int cambiarEstado (int estado, char c) {
 	}
 }
 
+void mostrarResultadoPorPantalla(){
+
+	FILE *fOutput;
+
+	fOutput = fopen ("output.txt", "r");
+	char c;
+
+	while(!feof(fOutput) ){
+		c = getc(fOutput);
+		printf("%c",c);
+	}
+
+	fclose(fOutput);
+	return;
+}
+
 void main() {
 
 	FILE *fInput, *fOutput;
@@ -153,10 +169,12 @@ void main() {
 	fInput = fopen ("input.txt", "r");
 	fOutput = fopen("output.txt", "w");
 
+    printf("  ARCHIVO ENTRADA : \n");
+    printf("---------------------\n");
 	while (!feof(fInput)) {
 
 		caracter = getc(fInput);
-        printf(&caracter);
+        printf("%c",caracter);
 		if (caracter == espacio || caracter == enter || feof (fInput)) {
 			if (estado !=0)
 				fputs(escribirTipo(estado), fOutput);
@@ -166,9 +184,14 @@ void main() {
 			estado = cambiarEstado(estado, caracter);
 		}
 	}
-
 	fclose(fInput);
 	fclose(fOutput);
+
+
+    printf("\n\n  ARCHIVO SALIDA : \n");
+    printf("---------------------\n");
+    mostrarResultadoPorPantalla();
+
 
 	return;
 }
