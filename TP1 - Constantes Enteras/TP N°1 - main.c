@@ -158,7 +158,8 @@ void main() {
 		caracter = getc(fInput);
         printf(&caracter);
 		if (caracter == espacio || caracter == enter || feof (fInput)) {
-			fputs(escribirTipo(estado), fOutput);
+			if (estado !=0)
+				fputs(escribirTipo(estado), fOutput);
 			estado = 0;
 		} else {
 			fputc(caracter, fOutput);
