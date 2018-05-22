@@ -1,0 +1,27 @@
+
+ TRABAJO PRACTICO 2 - FLEX  // fecha de entrega (26 / 06)
+--------------------------------------------------------
+
+ 1 ) Tomar archivo de C y eliminar todos los comentarios
+	 _______			 _______
+	|	|	 _______	|	|
+        |Archivo|	|	|	|Archivo|
+     	|.c con | ====>	|program| ====>	|.c sin |
+       	|coments|	|_______|	|coments|
+	|_______|			|_______|
+
+ 2 ) Tomar un archivo de texto y convertir caracteres del 
+alfabeto minúsculas a mayúsculas y mayúsculas a minúsculas
+
+ 3 ) Sumar todos los números decimales que figuran en un
+archivo de texto
+
+
+
+
+	      ENTREGA
+----------------------------------
+ 
+ - Archivo .c para cada punto
+ 
+ - Archivo de prueba para cada punto
