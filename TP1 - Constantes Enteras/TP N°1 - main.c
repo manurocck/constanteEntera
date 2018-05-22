@@ -101,9 +101,9 @@ int cambiarEstado (int tabla[16][8],int estado, char c) {
 void mostrarResultadoPorPantalla(){
 
 	FILE *fOutput;
+	char c;
 
 	fOutput = fopen ("output.txt", "r");
-	char c;
 
 	while(!feof(fOutput) ){
 		c = getc(fOutput);
@@ -119,7 +119,7 @@ void main() {
 	FILE *fInput, *fOutput;
 
 	char caracter;
-	int estado = 0;
+	int estado = 0, alinear = 0;
 	int tablaDeTransicion[16][8] = {
 		{2, 1, 1, 6, 6, 6, 6, 6},
 		{1, 1, 1, 6, 6, 7, 8, 6},
@@ -149,10 +149,14 @@ void main() {
 
 		caracter = getc(fInput);
         printf("%c",caracter);
+        alinear++;
 		if (caracter == espacio || caracter == enter || feof (fInput)) {
 			if (estado !=0)
+                		for (alinear;alinear<=22;alinear++)
+                    			fputc(' ', fOutput);
 				fputs(escribirTipo(estado), fOutput);
 			estado = 0;
+			alinear = 0;
 		} else {
 			fputc(caracter, fOutput);
 			estado = cambiarEstado(tablaDeTransicion, estado, caracter);
