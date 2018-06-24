@@ -17,6 +17,6 @@ int estoesunaprueba (int numero){
 	
 	total = num + otroNum; //ESTO SE SUPONE QUE DE 1199
 
-	return total; /* S1n embargo, el valor que devuelve es **** CINCUENTA **** !
+	return total; /* S1n embargo, el valor que devuelve es **** CINCUENTA **** ! */
 	
 }
