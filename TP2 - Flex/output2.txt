@@ -1,0 +1,22 @@
+﻿
+//acÁ arranca la cosa piola :) : "(ESTO NO TENDRIA QUE ENTRAR EN EL ARCHIVO OUTPUT DEL PUNTO 1)"
+
+/* eSTO CREO QUE TAMPOCO VA A ENTRAR ::::\OSEA\:::: -->> NO TENDRíA QUE ENTRAR */
+
+// ES UN COMENTARIO EN CAJA DE UNA LINEA
+
+/* el problema esta justamente acÁ
+cuando hago un comentario de varias lÍneas
+hay que hacer algo con el flex porque lee hasta el salto de lÍnea */
+
+INT ESTOESUNAPRUEBA (INT NUMERO){ 
+	
+	INT NUM = 200;
+	INT OTROnUM = 999;
+	INT TOTAL;
+	
+	TOTAL = NUM + OTROnUM; //esto se supone que de 1199
+
+	RETURN TOTAL; /* s1N EMBARGO, EL VALOR QUE DEVUELVE ES **** cincuenta **** ! */
+	
+}

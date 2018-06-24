@@ -1,0 +1,17 @@
+
+
+
+
+
+
+
+int estoesunaprueba (int numero){ 
+	
+	int num = 200;
+	int otroNum = 999;
+	int total;
+	
+	total = num + otroNum; 
+	return total; 
+	
+}
