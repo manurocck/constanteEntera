@@ -1,0 +1,22 @@
+
+//ACÁ ARRANCA LA COSA PIOLA :) : "(esto no tendria que entrar en el archivo output del punto 1)"
+
+/* Esto creo que tampoco va a entrar ::::\osea\:::: -->> no tendría que entrar */
+
+// es un comentario en caja de una linea
+
+/* EL PROBLEMA ESTA JUSTAMENTE ACÁ
+CUANDO HAGO UN COMENTARIO DE VARIAS LÍNEAS
+HAY QUE HACER ALGO CON EL FLEX PORQUE LEE HASTA EL SALTO DE LÍNEA */
+
+int estoesunaprueba (int numero){ 
+	
+	int num = 200;
+	int otroNum = 999;
+	int total;
+	
+	total = num + otroNum; //ESTO SE SUPONE QUE DE 1199
+
+	return total; /* S1n embargo, el valor que devuelve es **** CINCUENTA **** !
+	
+}
