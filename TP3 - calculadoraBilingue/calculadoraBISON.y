@@ -1,12 +1,12 @@
-/* Calculadora de notación polaca inversa */
-
 %{
 #include <math.h>
 #include <stdio.h>
 #include <ctype.h>
 %}
 
-%token NUM
+%token DECNUM
+%token HEXNUM
+%token OCTNUM
 
 
 %% /* A continuación las reglas gramaticales y las acciones */
@@ -17,8 +17,8 @@ input:    /* vacío */
 
 line:     '\n'
         | expDEC '\n'  { printf ("\t %d\n", $1); }
-		| expOCT '\n'  { printf () }	
-		| expHEX '\n'  { printf () }
+		| expOCT '\n'  { printf ("\t %s\n", decimalAoctal($1) ) }	
+		| expHEX '\n'  { printf ("\t %s\n", decimalAhexa($1) ) }
 ;
 
 expDEC:   decNUM          		{ $$ = $1;         }
