@@ -24,7 +24,7 @@ input:    /* vacío */
 line:     '\n'
         | expDEC '\n'  { printf ("\t %d\n", $1); }
 		| expOCT '\n'  { printf ("\t %d\n", decimalAoctal($1) ); }	
-		| expHEX '\n'  {decimalAhexa($1); printf ("\t %s\n", $1 ); }
+		| expHEX '\n'  {char hex[20]; decimalAhexa(hex,$1); printf ("\t %s\n", hex ); }
 ;
 
 expDEC:   DECNUM          		{ $$ = $1;         }
@@ -74,9 +74,8 @@ char caracterHexa(int ndec){
 	return 0
 }
 
-void decimalAhexa(char *cdec){
+void decimalAhexa(char *cdec, int edec){
 
-    int edec = atoi(cdec);
     int pos = 0;
     int posi = 0;
     char hexainv[20];
@@ -106,9 +105,8 @@ void decimalAhexa(char *cdec){
 
 }
 
-int decimalAoctal(char *cdec){
+int decimalAoctal(int edec){
 
-    int edec = atoi(cdec);
     int eoct;
     int pos = 0;
     int posi = 0;
