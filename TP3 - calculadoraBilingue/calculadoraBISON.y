@@ -23,8 +23,8 @@ input:    /* vacío */
 
 line:     '\n'
         | expDEC '\n'  { printf ("\t %d\n", $1); }
-		| expOCT '\n'  { printf ("\t %s\n", decimalAoctal($1) ) }	
-		| expHEX '\n'  {decimalAhexa($1) printf ("\t %s\n", $1 ) }
+		| expOCT '\n'  { printf ("\t %d\n", decimalAoctal($1) ); }	
+		| expHEX '\n'  {decimalAhexa($1); printf ("\t %s\n", $1 ); }
 ;
 
 expDEC:   DECNUM          		{ $$ = $1;         }
