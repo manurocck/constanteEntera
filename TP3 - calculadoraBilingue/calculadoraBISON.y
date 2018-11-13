@@ -15,19 +15,19 @@
 %token OCTNUM
 
 
-%% /* A continuaciÛn las reglas gramaticales y las acciones */
+%% /* A continuaci√≥n las reglas gramaticales y las acciones */
 
-input:    /* vacÌo */
+input:    /* vac√≠o */
         | input line
 ;
 
 line:     '\n'
         | expDEC '\n'  { printf ("\t %d\n", $1); }
 		| expOCT '\n'  { printf ("\t %s\n", decimalAoctal($1) ) }	
-		| expHEX '\n'  { printf ("\t %s\n", decimalAhexa($1) ) }
+		| expHEX '\n'  {decimalAhexa($1) printf ("\t %s\n", $1 ) }
 ;
 
-expDEC:   HEXNUM          		{ $$ = $1;         }
+expDEC:   DECNUM          		{ $$ = $1;         }
         | expDEC '+' expDEC     { $$ = $1 + $3;    }
         | expDEC '-' expDEC     { $$ = $1 - $3;    }
         | expDEC '*' expDEC     { $$ = $1 * $3;    }
@@ -234,7 +234,7 @@ int hexaAdecimal(char cadena[]){ // convierte un string del tipo [a-a]{2}[a-fA-F
     return numHexadecimal ;
 }
 int octalAdecimal(char cadena[]){
-    int punteroFinDeCadena = longitudCadena(cadena) - 2 ; //1 porque est· la posicion 0 + 1 p/caracter 0 con el que empieza todo octal
+    int punteroFinDeCadena = longitudCadena(cadena) - 2 ; //1 porque est√° la posicion 0 + 1 p/caracter 0 con el que empieza todo octal
     int posicionReal = punteroFinDeCadena ;
     int posicionPuntero = 1 ; //porque todo octal empieza en 0
     int numOctal = 0 ;
