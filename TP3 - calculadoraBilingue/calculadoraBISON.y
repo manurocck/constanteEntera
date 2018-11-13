@@ -21,7 +21,7 @@ line:     '\n'
 		| expHEX '\n'  { printf ("\t %s\n", decimalAhexa($1) ) }
 ;
 
-expDEC:   decNUM          		{ $$ = $1;         }
+expDEC:   HEXNUM          		{ $$ = $1;         }
         | expDEC '+' expDEC     { $$ = $1 + $3;    }
         | expDEC '-' expDEC     { $$ = $1 - $3;    }
         | expDEC '*' expDEC     { $$ = $1 * $3;    }
@@ -29,7 +29,7 @@ expDEC:   decNUM          		{ $$ = $1;         }
         | expDEC '^' expDEC     { $$ = pow ($1, $3); }
 ;
 
-expOCT:   octNUM      		    { $$ = $1;         }
+expOCT:   OCTNUM      		    { $$ = $1;         }
         | expOCT '+' expOCT     { $$ = $1 + $3;    }
         | expOCT '-' expOCT     { $$ = $1 - $3;    }
         | expOCT '*' expOCT     { $$ = $1 * $3;    }
@@ -37,7 +37,7 @@ expOCT:   octNUM      		    { $$ = $1;         }
         | expOCT '^' expOCT     { $$ = pow ($1, $3); }
 ;
 
-expHEX:   hexNUM       		    { $$ = $1;         }
+expHEX:   HEXNUM       		    { $$ = $1;         }
         | expHEX '+' expHEX     { $$ = $1 + $3;    }
         | expHEX '-' expHEX     { $$ = $1 - $3;    }
         | expHEX '*' expHEX     { $$ = $1 * $3;    }
