@@ -1,5 +1,3 @@
-
-
 %{
 
 #include <math.h>
@@ -8,116 +6,56 @@
 #include <stdlib.h>
 #include <string.h>
 
-int caracterHexaADecimal(char c){
-    switch(c){
-        case '0':
-            return 0 ;
-        case '1':
-            return 1 ;
-        case '2':
-            return 2 ;
-        case '3':
-            return 3 ;
-        case '4':
-            return 4 ;
-        case '5':
-            return 5 ;
-        case '6':
-            return 6 ;
-        case '7':
-            return 7 ;
-        case '8':
-            return 8 ;
-        case '9':
-            return 9 ;
-        case 'A':
-        case 'a':
-            return 10 ;
-        case 'B':
-        case 'b':
-            return 11 ;
-        case 'C':
-        case 'c':
-            return 12 ;
-        case 'D':
-        case 'd':
-            return 13 ;
-        case 'E':
-        case 'e':
-            return 14 ;
-        case 'F':
-        case 'f':
-            return 15 ;
-        case '\n':
-        case '\0':
-            return 0 ;
-        break;
-    }
-    return 0 ;
-}
+%}
 
-int caracterOctalADecimal(char c){
-    switch(c){
-        case '0':
-            return 0 ;
-        case '1':
-            return 1 ;
-        case '2':
-            return 2 ;
-        case '3':
-            return 3 ;
-        case '4':
-            return 4 ;
-        case '5':
-            return 5 ;
-        case '6':
-            return 6 ;
-        case '7':
-            return 7 ;
-        case '8':
-            return 8 ;
-        case '\n':
-        case '\0':
-            return 0 ;
-        break;
-    }
-    return 0 ;
-}
+%token DECNUM
+%token HEXNUM
+%token OCTNUM
 
-int longitudCadena(char cadena[]){
-    int contador = 0 ;
-    while(cadena[contador]!='\0'){
-        contador++ ;
-    }
-    return contador ;
-}
+%left '+' '-'
+%left '*' '/'
+%left '^'
 
-int hexaAdecimal(char cadena[]){ // convierte un string del tipo [a-a]{2}[a-fA-F0-9]* a decimal
-    int punteroFinDeCadena = longitudCadena(cadena) - 3 ;
-    int posicionReal = punteroFinDeCadena ;
-    int posicionPuntero = 2 ;
-    int numHexadecimal = 0 ;
-    while (posicionReal>=0) { // se saltea el 0x
-        numHexadecimal += caracterHexaADecimal(cadena[posicionPuntero]) * pow(16,posicionReal);
-        posicionPuntero++ ;
-        posicionReal-- ;
-    }
+%% /* A continuaciÃ³n las reglas gramaticales y las acciones */
 
-    return numHexadecimal ;
-}
+input:    /* vacÃ­o */
+        | input line
+;
 
-int octalAdecimal(char cadena[]){
-    int punteroFinDeCadena = longitudCadena(cadena) - 2 ; //1 porque está la posicion 0 + 1 p/caracter 0 con el que empieza todo octal
-    int posicionReal = punteroFinDeCadena ;
-    int posicionPuntero = 1 ; //porque todo octal empieza en 0
-    int numOctal = 0 ;
-    while (posicionReal>=0) {
-        numOctal += caracterOctalADecimal(cadena[posicionPuntero]) * pow(8,posicionReal);
-        posicionPuntero++ ;
-        posicionReal-- ;
-    }
-    return numOctal ;
-}
+line:     '\n'
+        | expDEC '\n'  { printf ("\t %d\n", $1); }
+	| expOCT '\n'  { printf ("\t %d\n", decimalAoctal($1) ); }	
+	| expHEX '\n'  {char hex[20]; decimalAhexa(hex,$1); printf ("\t %s\n", hex ); }
+;
+
+expDEC:   DECNUM          	    { $$ = $1;         }
+        | expDEC '+' expDEC     { $$ = $1 + $3;    }
+        | expDEC '-' expDEC     { $$ = $1 - $3;    }
+        | expDEC '*' expDEC     { $$ = $1 * $3;    }
+        | expDEC '/' expDEC     { $$ = $1 / $3;    }
+        | expDEC '^' expDEC     { $$ = pow ($1, $3); }
+	| '('expDEC')'	        { $$ = ($2);       }
+;
+
+expOCT:   OCTNUM      		    { $$ = $1;         }
+        | expOCT '+' expOCT     { $$ = $1 + $3;    }
+        | expOCT '-' expOCT     { $$ = $1 - $3;    }
+        | expOCT '*' expOCT     { $$ = $1 * $3;    }
+        | expOCT '/' expOCT     { $$ = $1 / $3;    }
+        | expOCT '^' expOCT     { $$ = pow ($1, $3); }
+	| '('expOCT')'          { $$ = ($2);       }
+;
+
+expHEX:   HEXNUM       		    { $$ = $1;         }
+        | expHEX '+' expHEX     { $$ = $1 + $3;    }
+        | expHEX '-' expHEX     { $$ = $1 - $3;    }
+        | expHEX '*' expHEX     { $$ = $1 * $3;    }
+        | expHEX '/' expHEX     { $$ = $1 / $3;    }
+        | expHEX '^' expHEX     { $$ = pow ($1, $3); }
+	| '('expHEX')'	        { $$ = ($2);       }
+;
+
+%%
 
 char caracterHexa(int ndec){
 
@@ -137,7 +75,6 @@ char caracterHexa(int ndec){
         default:
             return ndec + '0';
     }
-	return 0;
 }
 
 void decimalAhexa(char *cdec, int edec){
@@ -202,52 +139,6 @@ int decimalAoctal(int edec){
     }
 
 }
-
-%}
-
-%token DECNUM
-%token HEXNUM
-%token OCTNUM
-
-
-%% /* A continuación las reglas gramaticales y las acciones */
-
-input:    /* vacío */
-        | input line
-;
-
-line:     '\n'
-        | expDEC '\n'  { printf ("\t %d\n", $1); }
-		| expOCT '\n'  { printf ("\t %d\n", decimalAoctal($1) ); }	
-		| expHEX '\n'  {char hex[20]; decimalAhexa(hex,$1); printf ("\t %s\n", hex ); }
-;
-
-expDEC:   DECNUM          		{ $$ = atoi(yytext);}
-        | expDEC '+' expDEC     { $$ = $1 + $3;    }
-        | expDEC '-' expDEC     { $$ = $1 - $3;    }
-        | expDEC '*' expDEC     { $$ = $1 * $3;    }
-        | expDEC '/' expDEC     { $$ = $1 / $3;    }
-        | expDEC '^' expDEC     { $$ = pow ($1, $3); }
-;
-
-expOCT:   OCTNUM      		    { $$ = octalAdecimal(yytext);}
-        | expOCT '+' expOCT     { $$ = $1 + $3;    }
-        | expOCT '-' expOCT     { $$ = $1 - $3;    }
-        | expOCT '*' expOCT     { $$ = $1 * $3;    }
-        | expOCT '/' expOCT     { $$ = $1 / $3;    }
-        | expOCT '^' expOCT     { $$ = pow ($1, $3); }
-;
-
-expHEX:   HEXNUM       		    { $$ = hexaAdecimal(yytext);}
-        | expHEX '+' expHEX     { $$ = $1 + $3;    }
-        | expHEX '-' expHEX     { $$ = $1 - $3;    }
-        | expHEX '*' expHEX     { $$ = $1 * $3;    }
-        | expHEX '/' expHEX     { $$ = $1 / $3;    }
-        | expHEX '^' expHEX     { $$ = pow ($1, $3); }
-;
-
-%%
-
 
 yyerror (s)  /* Llamada por yyparse ante un error */
      char *s;
