@@ -614,17 +614,17 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 10 "calculadoraFLEX.l"
-{yylval = atoi(yytext); return DECNUM;}
+{ return DECNUM; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 11 "calculadoraFLEX.l"
-{yyval = hexaAdecimal(yytext): return OCTNUM }
+{ return OCTNUM; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 12 "calculadoraFLEX.l"
-{ yyval = hexaAdecimal(yytext): return HEXNUM }
+{ return HEXNUM; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
@@ -1548,4 +1548,5 @@ int main()
 	}
 #endif
 #line 20 "calculadoraFLEX.l"
+
 

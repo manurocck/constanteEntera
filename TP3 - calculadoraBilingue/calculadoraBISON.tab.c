@@ -77,10 +77,205 @@
 #include <stdlib.h>
 #include <string.h>
 
+int caracterHexaADecimal(char c){
+    switch(c){
+        case '0':
+            return 0 ;
+        case '1':
+            return 1 ;
+        case '2':
+            return 2 ;
+        case '3':
+            return 3 ;
+        case '4':
+            return 4 ;
+        case '5':
+            return 5 ;
+        case '6':
+            return 6 ;
+        case '7':
+            return 7 ;
+        case '8':
+            return 8 ;
+        case '9':
+            return 9 ;
+        case 'A':
+        case 'a':
+            return 10 ;
+        case 'B':
+        case 'b':
+            return 11 ;
+        case 'C':
+        case 'c':
+            return 12 ;
+        case 'D':
+        case 'd':
+            return 13 ;
+        case 'E':
+        case 'e':
+            return 14 ;
+        case 'F':
+        case 'f':
+            return 15 ;
+        case '\n':
+        case '\0':
+            return 0 ;
+        break;
+    }
+    return 0 ;
+}
+
+int caracterOctalADecimal(char c){
+    switch(c){
+        case '0':
+            return 0 ;
+        case '1':
+            return 1 ;
+        case '2':
+            return 2 ;
+        case '3':
+            return 3 ;
+        case '4':
+            return 4 ;
+        case '5':
+            return 5 ;
+        case '6':
+            return 6 ;
+        case '7':
+            return 7 ;
+        case '8':
+            return 8 ;
+        case '\n':
+        case '\0':
+            return 0 ;
+        break;
+    }
+    return 0 ;
+}
+
+int longitudCadena(char cadena[]){
+    int contador = 0 ;
+    while(cadena[contador]!='\0'){
+        contador++ ;
+    }
+    return contador ;
+}
+
+int hexaAdecimal(char cadena[]){ // convierte un string del tipo [a-a]{2}[a-fA-F0-9]* a decimal
+    int punteroFinDeCadena = longitudCadena(cadena) - 3 ;
+    int posicionReal = punteroFinDeCadena ;
+    int posicionPuntero = 2 ;
+    int numHexadecimal = 0 ;
+    while (posicionReal>=0) { // se saltea el 0x
+        numHexadecimal += caracterHexaADecimal(cadena[posicionPuntero]) * pow(16,posicionReal);
+        posicionPuntero++ ;
+        posicionReal-- ;
+    }
+
+    return numHexadecimal ;
+}
+
+int octalAdecimal(char cadena[]){
+    int punteroFinDeCadena = longitudCadena(cadena) - 2 ; //1 porque está la posicion 0 + 1 p/caracter 0 con el que empieza todo octal
+    int posicionReal = punteroFinDeCadena ;
+    int posicionPuntero = 1 ; //porque todo octal empieza en 0
+    int numOctal = 0 ;
+    while (posicionReal>=0) {
+        numOctal += caracterOctalADecimal(cadena[posicionPuntero]) * pow(8,posicionReal);
+        posicionPuntero++ ;
+        posicionReal-- ;
+    }
+    return numOctal ;
+}
+
+char caracterHexa(int ndec){
+
+    switch(ndec){
+        case 10:
+            return 'A';
+        case 11:
+            return 'B';
+        case 12:
+            return 'C';
+        case 13:
+            return 'D';
+        case 14:
+            return 'E';
+        case 15:
+            return 'F';
+        default:
+            return ndec + '0';
+    }
+	return 0;
+}
+
+void decimalAhexa(char *cdec, int edec){
+
+    int pos = 0;
+    int posi = 0;
+    char hexainv[20];
+    char chexa[20];
+    char resto;
+    if (edec >= 16){
+    while(edec >= 16){
+        resto = caracterHexa(edec % 16);
+        hexainv[posi] = resto;
+        posi = posi + 1;
+        edec = edec - (edec % 16);
+        edec = edec / 16;
+    }
+    hexainv[posi] = caracterHexa(edec);
+    while (posi >= 0){
+        chexa[pos] = hexainv[posi];
+        posi = posi - 1;
+        pos = pos + 1;
+    }
+    chexa[pos] = '\0';
+    strcpy(cdec,chexa);
+    }else{
+    chexa[0] = caracterHexa(edec);
+    chexa[1] = '\0';
+    strcpy(cdec,chexa);
+    }
+
+}
+
+int decimalAoctal(int edec){
+
+    int eoct;
+    int pos = 0;
+    int posi = 0;
+    char octinv[20];
+    char coct[20];
+    char resto;
+    if (edec >= 0 && edec < 8){
+        return edec;
+    }
+    else{
+    while(edec >= 8){
+        resto = edec % 8 + '0';
+        octinv[posi] = resto;
+        posi = posi + 1;
+        edec = edec - (edec % 8);
+        edec = edec / 8;
+    }
+    octinv[posi] = edec + '0';
+    while (posi >= 0){
+        coct[pos] = octinv[posi];
+        posi = posi - 1;
+        pos = pos + 1;
+    }
+    coct[pos] = '\0';
+    eoct = atoi(coct);
+    return eoct;
+    }
+
+}
+
 
 
 /* Line 189 of yacc.c  */
-#line 84 "calculadoraBISON.tab.c"
+#line 279 "calculadoraBISON.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -127,7 +322,7 @@ typedef int YYSTYPE;
 
 
 /* Line 264 of yacc.c  */
-#line 131 "calculadoraBISON.tab.c"
+#line 326 "calculadoraBISON.tab.c"
 
 #ifdef short
 # undef short
@@ -342,7 +537,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   58
+#define YYLAST   59
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  12
@@ -351,7 +546,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  25
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  45
+#define YYNSTATES  44
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -406,7 +601,7 @@ static const yytype_uint8 yyprhs[] =
 static const yytype_int8 yyrhs[] =
 {
       13,     0,    -1,    -1,    13,    14,    -1,     6,    -1,    15,
-       6,    -1,    16,     6,    -1,    17,     6,    -1,     4,    -1,
+       6,    -1,    16,     6,    -1,    17,     6,    -1,     3,    -1,
       15,     7,    15,    -1,    15,     8,    15,    -1,    15,     9,
       15,    -1,    15,    10,    15,    -1,    15,    11,    15,    -1,
        5,    -1,    16,     7,    16,    -1,    16,     8,    16,    -1,
@@ -419,9 +614,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    20,    20,    21,    24,    25,    26,    27,    30,    31,
-      32,    33,    34,    35,    38,    39,    40,    41,    42,    43,
-      46,    47,    48,    49,    50,    51
+       0,   215,   215,   216,   219,   220,   221,   222,   225,   226,
+     227,   228,   229,   230,   233,   234,   235,   236,   237,   238,
+     241,   242,   243,   244,   245,   246
 };
 #endif
 
@@ -467,17 +662,17 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,     8,    14,     4,     3,     0,     0,     0,
-       5,     0,     0,     0,     0,     0,     6,     0,     0,     0,
-       0,     0,     7,     0,     0,     0,     0,     0,     8,     9,
-      10,    11,    12,    13,    15,    16,    17,    18,    19,    20,
-      21,    22,    23,    24,    25
+       2,     0,     1,     8,    20,    14,     4,     3,     0,     0,
+       0,     5,     0,     0,     0,     0,     0,     6,     0,     0,
+       0,     0,     0,     7,     0,     0,     0,     0,     0,     9,
+      10,    11,    12,    13,    15,    16,    17,    18,    19,    21,
+      22,    23,    24,    25
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     1,     6,     7,     8,     9
+      -1,     1,     7,     8,     9,    10
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
@@ -485,11 +680,11 @@ static const yytype_int8 yydefgoto[] =
 #define YYPACT_NINF -4
 static const yytype_int8 yypact[] =
 {
-      -4,     0,    -4,    -4,    -4,    -4,    -4,     1,     7,    13,
-      -4,    -3,    -3,    -3,    -3,    -3,    -4,    -2,    -2,    -2,
-      -2,    -2,    -4,    41,    41,    41,    41,    41,    -4,    18,
-      18,    18,    18,    18,    23,    23,    23,    23,    23,    -4,
-      28,    28,    28,    28,    28
+      -4,     0,    -4,    -4,    -4,    -4,    -4,    -4,     1,     7,
+      13,    -4,    -2,    -2,    -2,    -2,    -2,    -4,    -3,    -3,
+      -3,    -3,    -3,    -4,    36,    36,    36,    36,    36,    18,
+      18,    18,    18,    18,    23,    23,    23,    23,    23,    28,
+      28,    28,    28,    28
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -505,33 +700,33 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       2,    28,     0,     4,     3,     4,     5,    10,    11,    12,
-      13,    14,    15,    16,    17,    18,    19,    20,    21,    22,
-      23,    24,    25,    26,    27,    11,    12,    13,    14,    15,
-      17,    18,    19,    20,    21,    23,    24,    25,    26,    27,
-      29,    30,    31,    32,    33,    39,     0,    34,    35,    36,
-      37,    38,     0,     0,    40,    41,    42,    43,    44
+       2,     3,     5,     3,     4,     5,     6,    11,    12,    13,
+      14,    15,    16,    17,    18,    19,    20,    21,    22,    23,
+      24,    25,    26,    27,    28,    12,    13,    14,    15,    16,
+      18,    19,    20,    21,    22,    24,    25,    26,    27,    28,
+       4,    29,    30,    31,    32,    33,     0,     0,    34,    35,
+      36,    37,    38,     0,     0,    39,    40,    41,    42,    43
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     4,    -1,     5,     4,     5,     6,     6,     7,     8,
+       0,     3,     5,     3,     4,     5,     6,     6,     7,     8,
        9,    10,    11,     6,     7,     8,     9,    10,    11,     6,
        7,     8,     9,    10,    11,     7,     8,     9,    10,    11,
        7,     8,     9,    10,    11,     7,     8,     9,    10,    11,
-      11,    12,    13,    14,    15,     4,    -1,    17,    18,    19,
-      20,    21,    -1,    -1,    23,    24,    25,    26,    27
+       4,    12,    13,    14,    15,    16,    -1,    -1,    18,    19,
+      20,    21,    22,    -1,    -1,    24,    25,    26,    27,    28
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    13,     0,     4,     5,     6,    14,    15,    16,    17,
-       6,     7,     8,     9,    10,    11,     6,     7,     8,     9,
-      10,    11,     6,     7,     8,     9,    10,    11,     4,    15,
-      15,    15,    15,    15,    16,    16,    16,    16,    16,     4,
-      17,    17,    17,    17,    17
+       0,    13,     0,     3,     4,     5,     6,    14,    15,    16,
+      17,     6,     7,     8,     9,    10,    11,     6,     7,     8,
+       9,    10,    11,     6,     7,     8,     9,    10,    11,    15,
+      15,    15,    15,    15,    16,    16,    16,    16,    16,    17,
+      17,    17,    17,    17
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1345,154 +1540,154 @@ yyreduce:
         case 5:
 
 /* Line 1455 of yacc.c  */
-#line 25 "calculadoraBISON.y"
+#line 220 "calculadoraBISON.y"
     { printf ("\t %d\n", (yyvsp[(1) - (2)])); ;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 26 "calculadoraBISON.y"
-    { printf ("\t %s\n", decimalAoctal((yyvsp[(1) - (2)])) ) ;}
+#line 221 "calculadoraBISON.y"
+    { printf ("\t %d\n", decimalAoctal((yyvsp[(1) - (2)])) ); ;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 27 "calculadoraBISON.y"
-    { printf ("\t %s\n", decimalAhexa((yyvsp[(1) - (2)])) ) ;}
+#line 222 "calculadoraBISON.y"
+    {char hex[20]; decimalAhexa(hex,(yyvsp[(1) - (2)])); printf ("\t %s\n", hex ); ;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 30 "calculadoraBISON.y"
-    { (yyval) = (yyvsp[(1) - (1)]);         ;}
+#line 225 "calculadoraBISON.y"
+    { (yyval) = atoi(yytext);;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 31 "calculadoraBISON.y"
+#line 226 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 32 "calculadoraBISON.y"
+#line 227 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) - (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 33 "calculadoraBISON.y"
+#line 228 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) * (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 34 "calculadoraBISON.y"
+#line 229 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) / (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 35 "calculadoraBISON.y"
+#line 230 "calculadoraBISON.y"
     { (yyval) = pow ((yyvsp[(1) - (3)]), (yyvsp[(3) - (3)])); ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 38 "calculadoraBISON.y"
-    { (yyval) = (yyvsp[(1) - (1)]);         ;}
+#line 233 "calculadoraBISON.y"
+    { (yyval) = octalAdecimal(yytext);;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 39 "calculadoraBISON.y"
+#line 234 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 40 "calculadoraBISON.y"
+#line 235 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) - (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 41 "calculadoraBISON.y"
+#line 236 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) * (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 42 "calculadoraBISON.y"
+#line 237 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) / (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 43 "calculadoraBISON.y"
+#line 238 "calculadoraBISON.y"
     { (yyval) = pow ((yyvsp[(1) - (3)]), (yyvsp[(3) - (3)])); ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 46 "calculadoraBISON.y"
-    { (yyval) = (yyvsp[(1) - (1)]);         ;}
+#line 241 "calculadoraBISON.y"
+    { (yyval) = hexaAdecimal(yytext);;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 47 "calculadoraBISON.y"
+#line 242 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 48 "calculadoraBISON.y"
+#line 243 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) - (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 49 "calculadoraBISON.y"
+#line 244 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) * (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 50 "calculadoraBISON.y"
+#line 245 "calculadoraBISON.y"
     { (yyval) = (yyvsp[(1) - (3)]) / (yyvsp[(3) - (3)]);    ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 51 "calculadoraBISON.y"
+#line 246 "calculadoraBISON.y"
     { (yyval) = pow ((yyvsp[(1) - (3)]), (yyvsp[(3) - (3)])); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1496 "calculadoraBISON.tab.c"
+#line 1691 "calculadoraBISON.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1704,201 +1899,9 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 54 "calculadoraBISON.y"
+#line 249 "calculadoraBISON.y"
 
 
-char caracterHexa(int ndec){
-
-    switch(ndec){
-        case 10:
-            return 'A';
-        case 11:
-            return 'B';
-        case 12:
-            return 'C';
-        case 13:
-            return 'D';
-        case 14:
-            return 'E';
-        case 15:
-            return 'F';
-        default:
-            return ndec + '0';
-    }
-	return 0
-}
-
-void decimalAhexa(char *cdec){
-
-    int edec = atoi(cdec);
-    int pos = 0;
-    int posi = 0;
-    char hexainv[20];
-    char chexa[20];
-    char resto;
-    if (edec >= 16){
-    while(edec >= 16){
-        resto = caracterHexa(edec % 16);
-        hexainv[posi] = resto;
-        posi = posi + 1;
-        edec = edec - (edec % 16);
-        edec = edec / 16;
-    }
-    hexainv[posi] = caracterHexa(edec);
-    while (posi >= 0){
-        chexa[pos] = hexainv[posi];
-        posi = posi - 1;
-        pos = pos + 1;
-    }
-    chexa[pos] = '\0';
-    strcpy(cdec,chexa);
-    }else{
-    chexa[0] = caracterHexa(edec);
-    chexa[1] = '\0';
-    strcpy(cdec,chexa);
-    }
-
-}
-
-int decimalAoctal(char *cdec){
-
-    int edec = atoi(cdec);
-    int eoct;
-    int pos = 0;
-    int posi = 0;
-    char octinv[20];
-    char coct[20];
-    char resto;
-    if (edec >= 0 && edec < 8){
-        return edec;
-    }
-    else{
-    while(edec >= 8){
-        resto = edec % 8 + '0';
-        octinv[posi] = resto;
-        posi = posi + 1;
-        edec = edec - (edec % 8);
-        edec = edec / 8;
-    }
-    octinv[posi] = edec + '0';
-    while (posi >= 0){
-        coct[pos] = octinv[posi];
-        posi = posi - 1;
-        pos = pos + 1;
-    }
-    coct[pos] = '\0';
-    eoct = atoi(coct);
-    return eoct;
-    }
-
-}
-
-int caracterHexaADecimal(char c){
-    switch(c){
-        case '0':
-            return 0 ;
-        case '1':
-            return 1 ;
-        case '2':
-            return 2 ;
-        case '3':
-            return 3 ;
-        case '4':
-            return 4 ;
-        case '5':
-            return 5 ;
-        case '6':
-            return 6 ;
-        case '7':
-            return 7 ;
-        case '8':
-            return 8 ;
-        case '9':
-            return 9 ;
-        case 'A':
-        case 'a':
-            return 10 ;
-        case 'B':
-        case 'b':
-            return 11 ;
-        case 'C':
-        case 'c':
-            return 12 ;
-        case 'D':
-        case 'd':
-            return 13 ;
-        case 'E':
-        case 'e':
-            return 14 ;
-        case 'F':
-        case 'f':
-            return 15 ;
-        case '\n':
-        case '\0':
-            return 0 ;
-        break;
-    }
-    return 0 ;
-}
-int caracterOctalADecimal(char c){
-    switch(c){
-        case '0':
-            return 0 ;
-        case '1':
-            return 1 ;
-        case '2':
-            return 2 ;
-        case '3':
-            return 3 ;
-        case '4':
-            return 4 ;
-        case '5':
-            return 5 ;
-        case '6':
-            return 6 ;
-        case '7':
-            return 7 ;
-        case '8':
-            return 8 ;
-        case '\n':
-        case '\0':
-            return 0 ;
-        break;
-    }
-    return 0 ;
-}
-int longitudCadena(char cadena[]){
-    int contador = 0 ;
-    while(cadena[contador]!='\0'){
-        contador++ ;
-    }
-    return contador ;
-}
-int hexaAdecimal(char cadena[]){ // convierte un string del tipo [a-a]{2}[a-fA-F0-9]* a decimal
-    int punteroFinDeCadena = longitudCadena(cadena) - 3 ;
-    int posicionReal = punteroFinDeCadena ;
-    int posicionPuntero = 2 ;
-    int numHexadecimal = 0 ;
-    while (posicionReal>=0) { // se saltea el 0x
-        numHexadecimal += caracterHexaADecimal(cadena[posicionPuntero]) * pow(16,posicionReal);
-        posicionPuntero++ ;
-        posicionReal-- ;
-    }
-
-    return numHexadecimal ;
-}
-int octalAdecimal(char cadena[]){
-    int punteroFinDeCadena = longitudCadena(cadena) - 2 ; //1 porque está la posicion 0 + 1 p/caracter 0 con el que empieza todo octal
-    int posicionReal = punteroFinDeCadena ;
-    int posicionPuntero = 1 ; //porque todo octal empieza en 0
-    int numOctal = 0 ;
-    while (posicionReal>=0) {
-        numOctal += caracterOctalADecimal(cadena[posicionPuntero]) * pow(8,posicionReal);
-        posicionPuntero++ ;
-        posicionReal-- ;
-    }
-    return numOctal ;
-}
 
 yyerror (s)  /* Llamada por yyparse ante un error */
      char *s;
